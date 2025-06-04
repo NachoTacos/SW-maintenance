@@ -39,7 +39,7 @@ class TaskManager:
             return
         
         print("\n" + "=" * 80)
-        print(f"{'ID':<5} {'TITLE':<20} {'STATUS':<10} {'CREATED DATE':<20} {'DESCRIPTION':<30}")
+        print(f"{'ID':<z} {'TITLE':<20} {'STATUS':<10} {'CREATED DATE':<20} {'DESCRIPTION':<30}")
         print("-" * 80)
         
         for task in self.tasks:
