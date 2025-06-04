@@ -3,9 +3,9 @@ import json
 from datetime import datetime
 
 class TaskManager:
-    def __init__(self):
+    def __init__(self, file_name="tasks.json"):
         self.tasks = []
-        self.file_name = "tasks.json"
+        self.file_name = file_name
         self.load_tasks()
     
     def load_tasks(self):
@@ -14,7 +14,6 @@ class TaskManager:
                 with open(self.file_name, "r") as file:
                     self.tasks = json.load(file)
             except:
-                print("Error loading task data. Starting with empty task list.")
                 self.tasks = []
     
     def save_tasks(self):
@@ -31,81 +30,63 @@ class TaskManager:
         }
         self.tasks.append(task)
         self.save_tasks()
-        print(f"Task '{title}' added successfully!")
     
     def list_tasks(self):
-        if not self.tasks:
-            print("No tasks found.")
-            return
-        
-        print("\n" + "=" * 80)
-        print(f"{'ID':<z} {'TITLE':<20} {'STATUS':<10} {'CREATED DATE':<20} {'DESCRIPTION':<30}")
-        print("-" * 80)
-        
-        for task in self.tasks:
-            print(f"{task['id']:<5} {task['title'][:18]:<20} {task['status']:<10} {task['created_date']:<20} {task['description'][:28]:<30}")
-        
-        print("=" * 80 + "\n")
+        return self.tasks
     
     def mark_complete(self, task_id):
         for task in self.tasks:
             if task["id"] == task_id:
                 task["status"] = "Completed"
                 self.save_tasks()
-                print(f"Task '{task['title']}' marked as completed!")
-                return
-        print(f"Task with ID {task_id} not found.")
+                return True
+        return False
     
     def delete_task(self, task_id):
         for i, task in enumerate(self.tasks):
             if task["id"] == task_id:
-                removed = self.tasks.pop(i)
+                self.tasks.pop(i)
                 self.save_tasks()
-                print(f"Task '{removed['title']}' deleted successfully!")
-                return
-        print(f"Task with ID {task_id} not found.")
+                return True
+        return False
 
 
-def main():
-    task_manager = TaskManager()
-    
-    # Funcion que maneja ahora la interfaz del usuario
-    def manager_interface(task_manager):
-            while True:
-                print("\nTASK MANAGER")
-                print("1. Add Task")
-                print("2. List Tasks")
-                print("3. Mark Task as Complete")
-                print("4. Delete Task")
-                print("5. Exit")
-                
-                choice = input("Enter your choice (1-5): ")
-                
-                if choice == "1":
-                    title = input("Enter task title: ")
-                    description = input("Enter task description: ")
-                    task_manager.add_task(title, description)
-                
-                elif choice == "2":
-                    task_manager.list_tasks()
-                
-                elif choice == "3":
-                    task_id = int(input("Enter task ID to mark as complete: "))
-                    task_manager.mark_complete(task_id)
-                
-                elif choice == "4":
-                    task_id = int(input("Enter task ID to delete: "))
-                    task_manager.delete_task(task_id)
-                
-                elif choice == "5":
-                    print("Exiting Task Manager. Goodbye!")
-                    break
-                
-                else:
-                    print("Invalid choice. Please try again.")
+def manager_interface(class_task_manager, choice):
+       
+    while True:
+        print("\nTASK MANAGER")
+        print("1. Add Task")
+        print("2. List Tasks")
+        print("3. Mark Task as Complete")
+        print("4. Delete Task")
+        print("5. Exit")
+        
+        choice = input("Enter your choice (1-5): ")
+        
+        if choice == "1":
+            title = input("Enter task title: ")
+            description = input("Enter task description: ")
+            task_manager.add_task(title, description)
+        
+        elif choice == "2":
+            task_manager.list_tasks()
+        
+        elif choice == "3":
+            task_id = int(input("Enter task ID to mark as complete: "))
+            task_manager.mark_complete(task_id)
+        
+        elif choice == "4":
+            task_id = int(input("Enter task ID to delete: "))
+            task_manager.delete_task(task_id)
+        
+        elif choice == "5":
+            print("Exiting Task Manager. Goodbye!")
+            break
+        
+        else:
+            print("Invalid choice. Please try again.")
 
-
-    manager_interface(task_manager)
 
 if __name__ == "__main__":
-    main()
+    task_manager = TaskManager()
+    manager_interface(task_manager)
