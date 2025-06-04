@@ -5,7 +5,7 @@ from datetime import datetime
 class TaskManager:
     def __init__(self, file_name="tasks.json"):
         self.tasks = []
-        self.file_name = file_name
+        self.file_name = "tasks.json"
         self.load_tasks()
     
     def load_tasks(self):
@@ -14,6 +14,7 @@ class TaskManager:
                 with open(self.file_name, "r") as file:
                     self.tasks = json.load(file)
             except:
+                print("Error loading task data. Starting with empty task list.")
                 self.tasks = []
     
     def save_tasks(self):
@@ -30,16 +31,30 @@ class TaskManager:
         }
         self.tasks.append(task)
         self.save_tasks()
+        print(f"Task '{title}' added successfully!")
     
     def list_tasks(self):
-        return self.tasks
+        if not self.tasks:
+            print("No tasks found.")
+            return self.tasks
+        
+        print("\n" + "=" * 80)
+        print(f"{'ID':<5} {'TITLE':<20} {'STATUS':<10} {'CREATED DATE':<20} {'DESCRIPTION':<30}")
+        print("-" * 80)
+        
+        for task in self.tasks:
+            print(f"{task['id']:<5} {task['title'][:18]:<20} {task['status']:<10} {task['created_date']:<20} {task['description'][:28]:<30}")
+        
+        print("=" * 80 + "\n")
     
     def mark_complete(self, task_id):
         for task in self.tasks:
             if task["id"] == task_id:
                 task["status"] = "Completed"
                 self.save_tasks()
+                print(f"Task '{task['title']}' marked as completed!")
                 return True
+        print(f"Task with ID {task_id} not found.")
         return False
     
     def delete_task(self, task_id):
@@ -47,11 +62,13 @@ class TaskManager:
             if task["id"] == task_id:
                 self.tasks.pop(i)
                 self.save_tasks()
+                print(f"Task  deleted successfully!")
                 return True
+        print(f"Task with ID {task_id} not found.")
         return False
 
 
-def manager_interface(class_task_manager, choice):
+def manager_interface(class_task_manager):
        
     while True:
         print("\nTASK MANAGER")
