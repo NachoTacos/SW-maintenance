@@ -1,18 +1,4 @@
-from task_manager import TaskManager
-
-def display_tasks(tasks):
-    if not tasks:
-        print("No tasks found.")
-        return
-    
-    print("\n" + "=" * 80)
-    print(f"{'ID':<5} {'TITLE':<20} {'STATUS':<10} {'CREATED DATE':<20} {'DESCRIPTION':<30}")
-    print("-" * 80)
-
-    for task in tasks:
-        print(f"{task['id']:<5} {task['title'][:18]:<20} {task['status']:<10} {task['created_date']:<20} {task['description'][:28]:<30}")
-
-    print("=" * 80 + "\n")
+from TaskManager import TaskManager
 
 def main():
     task_manager = TaskManager()
@@ -25,37 +11,29 @@ def main():
         print("4. Delete Task")
         print("5. Exit")
 
-        choice = input("Enter your choice (1-5): ").strip()
+        choice = input("Enter your choice (1-5): ")
 
         if choice == "1":
             title = input("Enter task title: ")
             description = input("Enter task description: ")
             task_manager.add_task(title, description)
-            print(f"Task '{title}' added successfully!")
 
         elif choice == "2":
-            tasks = task_manager.get_tasks()
-            display_tasks(tasks)
+            task_manager.list_tasks()
 
         elif choice == "3":
             try:
                 task_id = int(input("Enter task ID to mark as complete: "))
-                if task_manager.mark_complete(task_id):
-                    print(f"Task {task_id} marked as completed!")
-                else:
-                    print("Task not found.")
+                task_manager.mark_complete(task_id)
             except ValueError:
-                print("Invalid task ID.")
+                print("Invalid input. Please enter a numeric task ID.")
 
         elif choice == "4":
             try:
                 task_id = int(input("Enter task ID to delete: "))
-                if task_manager.delete_task(task_id):
-                    print(f"Task {task_id} deleted successfully!")
-                else:
-                    print("Task not found.")
+                task_manager.delete_task(task_id)
             except ValueError:
-                print("Invalid task ID.")
+                print("Invalid input. Please enter a numeric task ID.")
 
         elif choice == "5":
             print("Exiting Task Manager. Goodbye!")
