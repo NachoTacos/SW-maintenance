@@ -2,6 +2,9 @@ import os
 import pytest
 import json
 from TaskManager import TaskManager  
+import psycopg2
+from psycopg2 import sql
+
 TEST_FILE = "tasks.json"
 
 @pytest.fixture
@@ -35,3 +38,6 @@ def test_mark_nonexistent_task(task_manager):
 def test_delete_nonexistent_task(task_manager):
     result = task_manager.delete_task(999)
     assert result is False
+
+
+
